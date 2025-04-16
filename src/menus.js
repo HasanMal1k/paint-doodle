@@ -4,14 +4,8 @@
 // import { available_languages, get_iso_language_name, get_language, get_language_emoji, get_language_endonym, localize, set_language } from "./app-localization.js";
 import { show_edit_colors_window } from "./edit-colors.js";
 import { palette_formats } from "./file-format-data.js";
-import { are_you_sure, change_url_param, choose_file_to_paste, clear, delete_selection, deselect, edit_copy, edit_cut, edit_paste, file_load_from_url, file_new, file_open, file_print, file_save, file_save_as, image_attributes, image_flip_and_rotate, image_invert_colors, image_stretch_and_skew, redo, render_history_as_gif, sanity_check_blob, save_selection_to_file, select_all, set_magnification, show_about_paint, show_custom_zoom_window, show_document_history, show_file_format_errors, show_multi_user_setup_dialog, show_news, toggle_grid, toggle_thumbnail, undo, view_bitmap } from "./functions.js";
-import { show_help } from "./help.js";
-import { $G, get_rgba_from_color, is_discord_embed } from "./helpers.js";
-import { show_imgur_uploader } from "./imgur.js";
-import { manage_storage } from "./manage-storage.js";
-import { showMessageBox } from "./msgbox.js";
-import { simulateRandomGesturesPeriodically, simulatingGestures, stopSimulatingGestures } from "./simulate-random-gestures.js";
-import { speech_recognition_active, speech_recognition_available } from "./speech-recognition.js";
+import { change_url_param, clear, delete_selection, edit_copy, edit_cut, edit_paste, file_load_from_url, file_new, file_open, file_save, file_save_as, image_attributes, image_flip_and_rotate, image_invert_colors, image_stretch_and_skew, redo, sanity_check_blob, select_all, set_magnification, show_custom_zoom_window, show_document_history, show_file_format_errors, show_multi_user_setup_dialog, toggle_grid, toggle_thumbnail, undo } from "./functions.js";
+import { $G, get_rgba_from_color } from "./helpers.js";
 import { get_theme, set_theme } from "./theme.js";
 
 const looksLikeChrome = !!(window.chrome && (window.chrome.loadTimes || window.chrome.csi));
@@ -116,159 +110,159 @@ const menus = {
 			action: () => { file_load_from_url(); },
 			description: localize("Opens an image from the web."),
 		},
-		{
-			label: localize("&Upload To Imgur"),
-			speech_recognition: [
-				"upload to imgur", "upload image to imgur", "upload picture to imgur",
-			],
-			action: () => {
-				// include the selection in the saved image
-				deselect();
+		// {
+		// 	label: localize("&Upload To Imgur"),
+		// 	speech_recognition: [
+		// 		"upload to imgur", "upload image to imgur", "upload picture to imgur",
+		// 	],
+		// 	action: () => {
+		// 		// include the selection in the saved image
+		// 		deselect();
 
-				main_canvas.toBlob((blob) => {
-					sanity_check_blob(blob, () => {
-						show_imgur_uploader(blob);
-					});
-				});
-			},
-			description: localize("Uploads the active document to Imgur"),
-		},
-		MENU_DIVIDER,
-		{
-			label: localize("Manage Storage"),
-			speech_recognition: [
-				"manage storage", "show storage", "open storage window", "manage sessions", "show sessions", "show local sessions", "local sessions", "storage manager", "show storage manager", "open storage manager",
-				"show autosaves", "show saves", "show saved documents", "show saved files", "show saved pictures", "show saved images", "show local storage",
-				"autosaves", "autosave", "saved documents", "saved files", "saved pictures", "saved images", "local storage",
-			],
-			action: () => { manage_storage(); },
-			description: localize("Manages storage of previously created or opened pictures."),
-		},
-		MENU_DIVIDER,
-		{
-			label: localize("Print Pre&view"),
-			speech_recognition: [
-				"preview print", "print preview", "show print preview", "show preview of print",
-			],
-			action: () => {
-				file_print();
-			},
-			description: localize("Prints the active document and sets printing options."),
-			//description: localize("Displays full pages."),
-		},
-		{
-			label: localize("Page Se&tup"),
-			speech_recognition: [
-				"setup page for print", "setup page for printing", "set-up page for print", "set-up page for printing", "set up page for print", "set up page for printing",
-				"page setup", "printing setup", "page set-up", "printing set-up", "page set up", "printing set up",
-			],
-			action: () => {
-				file_print();
-			},
-			description: localize("Prints the active document and sets printing options."),
-			//description: localize("Changes the page layout."),
-		},
-		{
-			label: localize("&Print"),
-			...shortcut("Ctrl+P"), // relies on browser's print shortcut being Ctrl+P
-			speech_recognition: [
-				"print", "send to printer", "show print dialog",
-				"print page", "print image", "print picture", "print drawing",
-				"print out page", "print out image", "print out picture", "print out drawing",
-				"print out the page", "print out the image", "print out the picture", "print out the drawing",
+		// 		main_canvas.toBlob((blob) => {
+		// 			sanity_check_blob(blob, () => {
+		// 				show_imgur_uploader(blob);
+		// 			});
+		// 		});
+		// 	},
+		// 	description: localize("Uploads the active document to Imgur"),
+		// },
+		// MENU_DIVIDER,
+		// {
+		// 	label: localize("Manage Storage"),
+		// 	speech_recognition: [
+		// 		"manage storage", "show storage", "open storage window", "manage sessions", "show sessions", "show local sessions", "local sessions", "storage manager", "show storage manager", "open storage manager",
+		// 		"show autosaves", "show saves", "show saved documents", "show saved files", "show saved pictures", "show saved images", "show local storage",
+		// 		"autosaves", "autosave", "saved documents", "saved files", "saved pictures", "saved images", "local storage",
+		// 	],
+		// 	action: () => { manage_storage(); },
+		// 	description: localize("Manages storage of previously created or opened pictures."),
+		// },
+		// MENU_DIVIDER,
+		// {
+		// 	label: localize("Print Pre&view"),
+		// 	speech_recognition: [
+		// 		"preview print", "print preview", "show print preview", "show preview of print",
+		// 	],
+		// 	action: () => {
+		// 		file_print();
+		// 	},
+		// 	description: localize("Prints the active document and sets printing options."),
+		// 	//description: localize("Displays full pages."),
+		// },
+		// {
+		// 	label: localize("Page Se&tup"),
+		// 	speech_recognition: [
+		// 		"setup page for print", "setup page for printing", "set-up page for print", "set-up page for printing", "set up page for print", "set up page for printing",
+		// 		"page setup", "printing setup", "page set-up", "printing set-up", "page set up", "printing set up",
+		// 	],
+		// 	action: () => {
+		// 		file_print();
+		// 	},
+		// 	description: localize("Prints the active document and sets printing options."),
+		// 	//description: localize("Changes the page layout."),
+		// },
+		// {
+		// 	label: localize("&Print"),
+		// 	...shortcut("Ctrl+P"), // relies on browser's print shortcut being Ctrl+P
+		// 	speech_recognition: [
+		// 		"print", "send to printer", "show print dialog",
+		// 		"print page", "print image", "print picture", "print drawing",
+		// 		"print out page", "print out image", "print out picture", "print out drawing",
+		// 		"print out the page", "print out the image", "print out the picture", "print out the drawing",
 
-				"send page to printer", "send image to printer", "send picture to printer", "send drawing to printer",
-				"send page to the printer", "send image to the printer", "send picture to the printer", "send drawing to the printer",
-				"send the page to the printer", "send the image to the printer", "send the picture to the printer", "send the drawing to the printer",
-				"send the page to printer", "send the image to printer", "send the picture to printer", "send the drawing to printer",
-			],
-			action: () => {
-				file_print();
-			},
-			description: localize("Prints the active document and sets printing options."),
-		},
-		MENU_DIVIDER,
-		{
-			label: localize("Set As &Wallpaper (Tiled)"),
-			speech_recognition: [
-				"set as wallpaper",
-				"set as wallpaper tiled",
-				"set image as wallpaper tiled", "set picture as wallpaper tiled", "set drawing as wallpaper tiled",
-				"use as wallpaper tiled",
-				"use image as wallpaper tiled", "use picture as wallpaper tiled", "use drawing as wallpaper tiled",
-				"tile image as wallpaper", "tile picture as wallpaper", "tile drawing as wallpaper",
-			],
-			action: () => { systemHooks.setWallpaperTiled(main_canvas); },
-			description: localize("Tiles this bitmap as the desktop background."),
-		},
-		{
-			label: localize("Set As Wallpaper (&Centered)"), // in mspaint it's Wa&llpaper
-			speech_recognition: [
-				"set as wallpaper centered",
-				"set image as wallpaper centered", "set picture as wallpaper centered", "set drawing as wallpaper centered",
-				"use as wallpaper centered",
-				"use image as wallpaper centered", "use picture as wallpaper centered", "use drawing as wallpaper centered",
-				"center image as wallpaper", "center picture as wallpaper", "center drawing as wallpaper",
-			],
-			action: () => { systemHooks.setWallpaperCentered(main_canvas); },
-			description: localize("Centers this bitmap as the desktop background."),
-		},
-		MENU_DIVIDER,
+		// 		"send page to printer", "send image to printer", "send picture to printer", "send drawing to printer",
+		// 		"send page to the printer", "send image to the printer", "send picture to the printer", "send drawing to the printer",
+		// 		"send the page to the printer", "send the image to the printer", "send the picture to the printer", "send the drawing to the printer",
+		// 		"send the page to printer", "send the image to printer", "send the picture to printer", "send the drawing to printer",
+		// 	],
+		// 	action: () => {
+		// 		file_print();
+		// 	},
+		// 	description: localize("Prints the active document and sets printing options."),
+		// },
+		// MENU_DIVIDER,
+		// {
+		// 	label: localize("Set As &Wallpaper (Tiled)"),
+		// 	speech_recognition: [
+		// 		"set as wallpaper",
+		// 		"set as wallpaper tiled",
+		// 		"set image as wallpaper tiled", "set picture as wallpaper tiled", "set drawing as wallpaper tiled",
+		// 		"use as wallpaper tiled",
+		// 		"use image as wallpaper tiled", "use picture as wallpaper tiled", "use drawing as wallpaper tiled",
+		// 		"tile image as wallpaper", "tile picture as wallpaper", "tile drawing as wallpaper",
+		// 	],
+		// 	action: () => { systemHooks.setWallpaperTiled(main_canvas); },
+		// 	description: localize("Tiles this bitmap as the desktop background."),
+		// },
+		// {
+		// 	label: localize("Set As Wallpaper (&Centered)"), // in mspaint it's Wa&llpaper
+		// 	speech_recognition: [
+		// 		"set as wallpaper centered",
+		// 		"set image as wallpaper centered", "set picture as wallpaper centered", "set drawing as wallpaper centered",
+		// 		"use as wallpaper centered",
+		// 		"use image as wallpaper centered", "use picture as wallpaper centered", "use drawing as wallpaper centered",
+		// 		"center image as wallpaper", "center picture as wallpaper", "center drawing as wallpaper",
+		// 	],
+		// 	action: () => { systemHooks.setWallpaperCentered(main_canvas); },
+		// 	description: localize("Centers this bitmap as the desktop background."),
+		// },
+		// MENU_DIVIDER,
 		{
 			label: localize("Recent File"),
 			enabled: false, // @TODO for desktop app
 			description: localize(""),
 		},
-		MENU_DIVIDER,
-		{
-			label: localize("E&xit"),
-			...shortcut(window.is_electron_app ? "Alt+F4" : ""), // Alt+F4 closes the browser window (in most window managers)
-			speech_recognition: [
-				"exit application", "exit paint", "close paint window",
-			],
-			action: () => {
-				are_you_sure(() => {
-					if (is_discord_embed) {
-						// For the Discord Activity, there doesn't seem to be an API to exit the activity.
-						showMessageBox({
-							message: "Click the Leave Activity button in Discord to exit.",
-						});
-						return;
-					}
+		// MENU_DIVIDER,
+		// {
+		// 	label: localize("E&xit"),
+		// 	...shortcut(window.is_electron_app ? "Alt+F4" : ""), // Alt+F4 closes the browser window (in most window managers)
+		// 	speech_recognition: [
+		// 		"exit application", "exit paint", "close paint window",
+		// 	],
+		// 	action: () => {
+		// 		are_you_sure(() => {
+		// 			if (is_discord_embed) {
+		// 				// For the Discord Activity, there doesn't seem to be an API to exit the activity.
+		// 				showMessageBox({
+		// 					message: "Click the Leave Activity button in Discord to exit.",
+		// 				});
+		// 				return;
+		// 			}
 
-					// Note: For a Chrome PWA, window.close() is allowed only if there is only one history entry.
-					// I could make it try to close the window and then navigate to the official web desktop if it fails,
-					// but that would be inconsistent, as it wouldn't close the window after using File > New or File > Open.
-					// I could make it so that it uses replaceState when opening a new document (starting a new session);
-					// that would prevent you from using Alt+Left to go back to the previous document, but that may be acceptable
-					// for a desktop app experience, where the back button is already hidden.
-					// That said, if you just installed the PWA, it will have history already (even if just the New Tab page),
-					// as the tab is converted to a window, and in that case,
-					// it would be unable to close, again being inconsistent, but less so.
-					// (If on PWA install, the app could open a fresh new window and close itself, it could work from the start,
-					// but if we try to do that, we'll be back at square one, trying to close a window with history.)
-					try {
-						// API contract is containing page can override window.close()
-						// Note that e.g. (()=>{}).bind().toString() gives "function () { [native code] }"
-						// so the window.close() must not use bind() (not that that's common practice anyway)
-						const close_overridden = frameElement && window.close && !/\{\s*\[native code\]\s*\}/.test(window.close.toString());
-						if (close_overridden || window.is_electron_app) {
-							window.close();
-							return;
-						}
-					} catch (_error) {
-						// In a cross-origin iframe, most likely
-						// @TODO: establish postMessage API
-					}
-					// In a cross-origin iframe, or same origin but without custom close(), or top level:
-					// Not all browsers support close() for closing a tab,
-					// so redirect instead. Exit to the official web desktop.
-					// @ts-ignore
-					window.location = "https://98.js.org/";
-				});
-			},
-			description: localize("Quits Paint."),
-		},
+		// 			// Note: For a Chrome PWA, window.close() is allowed only if there is only one history entry.
+		// 			// I could make it try to close the window and then navigate to the official web desktop if it fails,
+		// 			// but that would be inconsistent, as it wouldn't close the window after using File > New or File > Open.
+		// 			// I could make it so that it uses replaceState when opening a new document (starting a new session);
+		// 			// that would prevent you from using Alt+Left to go back to the previous document, but that may be acceptable
+		// 			// for a desktop app experience, where the back button is already hidden.
+		// 			// That said, if you just installed the PWA, it will have history already (even if just the New Tab page),
+		// 			// as the tab is converted to a window, and in that case,
+		// 			// it would be unable to close, again being inconsistent, but less so.
+		// 			// (If on PWA install, the app could open a fresh new window and close itself, it could work from the start,
+		// 			// but if we try to do that, we'll be back at square one, trying to close a window with history.)
+		// 			try {
+		// 				// API contract is containing page can override window.close()
+		// 				// Note that e.g. (()=>{}).bind().toString() gives "function () { [native code] }"
+		// 				// so the window.close() must not use bind() (not that that's common practice anyway)
+		// 				const close_overridden = frameElement && window.close && !/\{\s*\[native code\]\s*\}/.test(window.close.toString());
+		// 				if (close_overridden || window.is_electron_app) {
+		// 					window.close();
+		// 					return;
+		// 				}
+		// 			} catch (_error) {
+		// 				// In a cross-origin iframe, most likely
+		// 				// @TODO: establish postMessage API
+		// 			}
+		// 			// In a cross-origin iframe, or same origin but without custom close(), or top level:
+		// 			// Not all browsers support close() for closing a tab,
+		// 			// so redirect instead. Exit to the official web desktop.
+		// 			// @ts-ignore
+		// 			window.location = "https://98.js.org/";
+		// 		});
+		// 	},
+		// 	description: localize("Quits Paint."),
+		// },
 	],
 	[localize("&Edit")]: [
 		{
@@ -364,28 +358,28 @@ const menus = {
 			action: () => { select_all(); },
 			description: localize("Selects everything."),
 		},
-		MENU_DIVIDER,
-		{
-			label: `${localize("C&opy To")}...`,
-			speech_recognition: [
-				"copy to file", "copy selection to file", "copy selection to a file", "save selection",
-				"save selection as file", "save selection as image", "save selection as picture", "save selection as image file", "save selection as document",
-				"save selection as a file", "save selection as a image", "save selection as a picture", "save selection as a image file", "save selection as a document",
-				"save selection to file", "save selection to image", "save selection to picture", "save selection to image file", "save selection to document",
-				"save selection to a file", "save selection to a image", "save selection to a picture", "save selection to a image file", "save selection to a document",
-			],
-			enabled: () => !!selection,
-			action: () => { save_selection_to_file(); },
-			description: localize("Copies the selection to a file."),
-		},
-		{
-			label: `${localize("Paste &From")}...`,
-			speech_recognition: [
-				"paste a file", "paste from a file", "insert a file", "insert an image file",
-			],
-			action: () => { choose_file_to_paste(); },
-			description: localize("Pastes a file into the selection."),
-		},
+		// MENU_DIVIDER,
+		// {
+		// 	label: `${localize("C&opy To")}...`,
+		// 	speech_recognition: [
+		// 		"copy to file", "copy selection to file", "copy selection to a file", "save selection",
+		// 		"save selection as file", "save selection as image", "save selection as picture", "save selection as image file", "save selection as document",
+		// 		"save selection as a file", "save selection as a image", "save selection as a picture", "save selection as a image file", "save selection as a document",
+		// 		"save selection to file", "save selection to image", "save selection to picture", "save selection to image file", "save selection to document",
+		// 		"save selection to a file", "save selection to a image", "save selection to a picture", "save selection to a image file", "save selection to a document",
+		// 	],
+		// 	enabled: () => !!selection,
+		// 	action: () => { save_selection_to_file(); },
+		// 	description: localize("Copies the selection to a file."),
+		// },
+		// {
+		// 	label: `${localize("Paste &From")}...`,
+		// 	speech_recognition: [
+		// 		"paste a file", "paste from a file", "insert a file", "insert an image file",
+		// 	],
+		// 	action: () => { choose_file_to_paste(); },
+		// 	description: localize("Pastes a file into the selection."),
+		// },
 	],
 	[localize("&View")]: [
 		{
@@ -560,19 +554,19 @@ const menus = {
 				},
 			],
 		},
-		{
-			label: localize("&View Bitmap"),
-			...shortcut("Ctrl+F"),
-			speech_recognition: [
-				"view bitmap", "show bitmap",
-				"fullscreen", "full-screen", "full screen",
-				"show picture fullscreen", "show picture full-screen", "show picture full screen",
-				"show image fullscreen", "show image full-screen", "show image full screen",
-				// @TODO: exit fullscreen
-			],
-			action: () => { view_bitmap(); },
-			description: localize("Displays the entire picture."),
-		},
+		// {
+		// 	label: localize("&View Bitmap"),
+		// 	...shortcut("Ctrl+F"),
+		// 	speech_recognition: [
+		// 		"view bitmap", "show bitmap",
+		// 		"fullscreen", "full-screen", "full screen",
+		// 		"show picture fullscreen", "show picture full-screen", "show picture full screen",
+		// 		"show image fullscreen", "show image full-screen", "show image full screen",
+		// 		// @TODO: exit fullscreen
+		// 	],
+		// 	action: () => { view_bitmap(); },
+		// 	description: localize("Displays the entire picture."),
+		// },
 		MENU_DIVIDER,
 		{
 			label: localize("&Fullscreen"),
@@ -766,71 +760,71 @@ const menus = {
 			description: localize("Saves the current palette of colors to a file."),
 		},
 	],
-	[localize("&Help")]: [
-		{
-			label: localize("&Help Topics"),
-			speech_recognition: [
-				"help topics", "help me", "show help", "help", "show help window", "show help topics", "open help",
-				"help viewer", "show help viewer", "open help viewer",
-			],
-			action: () => { show_help(); },
-			description: localize("Displays Help for the current task or command."),
-		},
-		MENU_DIVIDER,
-		{
-			label: localize("&About Paint"),
-			speech_recognition: [
-				"about paint", "about js paint", "about jspaint", "show about window", "open about window", "about window",
-				"app info", "about the app", "app information", "information about the app",
-				"application info", "about the application", "application information", "information about the application",
-				"who made this", "who did this", "who did this xd",
-			],
-			action: () => { show_about_paint(); },
-			description: localize("Displays information about this application."),
-			//description: localize("Displays program information, version number, and copyright."),
-		},
-	],
+	// [localize("&Help")]: [
+	// 	{
+	// 		label: localize("&Help Topics"),
+	// 		speech_recognition: [
+	// 			"help topics", "help me", "show help", "help", "show help window", "show help topics", "open help",
+	// 			"help viewer", "show help viewer", "open help viewer",
+	// 		],
+	// 		action: () => { show_help(); },
+	// 		description: localize("Displays Help for the current task or command."),
+	// 	},
+	// 	MENU_DIVIDER,
+	// 	{
+	// 		label: localize("&About Paint"),
+	// 		speech_recognition: [
+	// 			"about paint", "about js paint", "about jspaint", "show about window", "open about window", "about window",
+	// 			"app info", "about the app", "app information", "information about the app",
+	// 			"application info", "about the application", "application information", "information about the application",
+	// 			"who made this", "who did this", "who did this xd",
+	// 		],
+	// 		action: () => { show_about_paint(); },
+	// 		description: localize("Displays information about this application."),
+	// 		//description: localize("Displays program information, version number, and copyright."),
+	// 	},
+	// ],
 	[localize("E&xtras")]: [
-		{
-			emoji_icon: "⌚",
-			label: localize("&History"),
-			...shortcut("Ctrl+Shift+Y"),
-			speech_recognition: [
-				// This is a duplicate menu item (for easy access), so it doesn't need speech recognition data here.
-			],
-			action: () => { show_document_history(); },
-			description: localize("Shows the document history and lets you navigate to states not accessible with Undo or Repeat."),
-		},
-		{
-			emoji_icon: "🎞️",
-			label: localize("&Render History As GIF"),
-			...shortcut("Ctrl+Shift+G"),
-			speech_recognition: [
-				// @TODO: animated gif, blah
-				"render history as gif", "render history as a gif", "render history animation", "make history animation", "make animation of history", "make animation of document history", "make animation from document history",
-				"render a gif from the history", "render a gif animation from the history", "render an animation from the history",
-				"make a gif from the history", "make a gif animation from the history", "make an animation from the history",
-				"create a gif from the history", "create a gif animation from the history", "create an animation from the history",
-				// aaaaaaaaaaaaaaaaaaaaaaaaaa *exponentially explodes*
-				"make a gif", "make a gif of the history", "make a gif of the document history", "make a gif from the document history",
-				"create a gif", "create a gif of the history", "create a gif of the document history", "create a gif from the document history",
-				"make gif", "make gif of the history", "make gif of the document history", "make gif from the document history",
-				"create gif", "create gif of the history", "create gif of the document history", "create gif from the document history",
-				"make an animation", "make an animation of the history", "make an animation of the document history", "make an animation from the document history",
-				"create an animation", "create an animation of the history", "create an animation of the document history", "create an animation from the document history",
-				"make animation", "make animation of the history", "make animation of the document history", "make animation from the document history",
-				"create animation", "create animation of the history", "create animation of the document history", "create animation from the document history",
-			],
-			action: () => { render_history_as_gif(); },
-			description: localize("Creates an animation from the document history."),
-		},
+		// {
+		// 	emoji_icon: "⌚",
+		// 	label: localize("&History"),
+		// 	...shortcut("Ctrl+Shift+Y"),
+		// 	speech_recognition: [
+		// 		// This is a duplicate menu item (for easy access), so it doesn't need speech recognition data here.
+		// 	],
+		// 	action: () => { show_document_history(); },
+		// 	description: localize("Shows the document history and lets you navigate to states not accessible with Undo or Repeat."),
+		// },
+		// {
+		// 	emoji_icon: "🎞️",
+		// 	label: localize("&Render History As GIF"),
+		// 	...shortcut("Ctrl+Shift+G"),
+		// 	speech_recognition: [
+		// 		// @TODO: animated gif, blah
+		// 		"render history as gif", "render history as a gif", "render history animation", "make history animation", "make animation of history", "make animation of document history", "make animation from document history",
+		// 		"render a gif from the history", "render a gif animation from the history", "render an animation from the history",
+		// 		"make a gif from the history", "make a gif animation from the history", "make an animation from the history",
+		// 		"create a gif from the history", "create a gif animation from the history", "create an animation from the history",
+		// 		// aaaaaaaaaaaaaaaaaaaaaaaaaa *exponentially explodes*
+		// 		"make a gif", "make a gif of the history", "make a gif of the document history", "make a gif from the document history",
+		// 		"create a gif", "create a gif of the history", "create a gif of the document history", "create a gif from the document history",
+		// 		"make gif", "make gif of the history", "make gif of the document history", "make gif from the document history",
+		// 		"create gif", "create gif of the history", "create gif of the document history", "create gif from the document history",
+		// 		"make an animation", "make an animation of the history", "make an animation of the document history", "make an animation from the document history",
+		// 		"create an animation", "create an animation of the history", "create an animation of the document history", "create an animation from the document history",
+		// 		"make animation", "make animation of the history", "make animation of the document history", "make animation from the document history",
+		// 		"create animation", "create animation of the history", "create animation of the document history", "create animation from the document history",
+		// 	],
+		// 	action: () => { render_history_as_gif(); },
+		// 	description: localize("Creates an animation from the document history."),
+		// },
 		// {
 		// 	label: localize("Render History as &APNG",
 		// 	// shortcut: "Ctrl+Shift+A",
 		// 	action: ()=> { render_history_as_apng(); },
 		// 	description: localize("Creates an animation from the document history."),
 		// },
-		MENU_DIVIDER,
+		// MENU_DIVIDER,
 		// {
 		// 	label: localize("Extra T&ool Box",
 		// 	checkbox: {
@@ -852,27 +846,27 @@ const menus = {
 		// 	},
 		// 	description: localize("Configures JS Paint."),
 		// }
-		{
-			emoji_icon: "🤪",
-			label: localize("&Draw Randomly"),
-			speech_recognition: [
-				"draw randomly", "draw pseudorandomly", "draw wildly", "make random art",
-			],
-			checkbox: {
-				toggle: () => {
-					if (simulatingGestures) {
-						stopSimulatingGestures();
-					} else {
-						simulateRandomGesturesPeriodically();
-					}
-				},
-				check: () => {
-					return simulatingGestures;
-				},
-			},
-			description: localize("Draws randomly with different tools."),
-		},
-		MENU_DIVIDER,
+		// {
+		// 	emoji_icon: "🤪",
+		// 	label: localize("&Draw Randomly"),
+		// 	speech_recognition: [
+		// 		"draw randomly", "draw pseudorandomly", "draw wildly", "make random art",
+		// 	],
+		// 	checkbox: {
+		// 		toggle: () => {
+		// 			if (simulatingGestures) {
+		// 				stopSimulatingGestures();
+		// 			} else {
+		// 				simulateRandomGesturesPeriodically();
+		// 			}
+		// 		},
+		// 		check: () => {
+		// 			return simulatingGestures;
+		// 		},
+		// 	},
+		// 	description: localize("Draws randomly with different tools."),
+		// },
+		// MENU_DIVIDER,
 		{
 			emoji_icon: "👥",
 			label: localize("&Multi-User"),
@@ -1222,40 +1216,40 @@ const menus = {
 		},
 		// Later on I'll probably merge the Head Tracker and Dwell Clicker options into a Tracky Mouse option,
 		// or I'll create a preferences screen, where I'll be able to better clarify the relationships between features.
-		{
-			emoji_icon: "⏱️",
-			// label: localize("Dwell &Click"),
-			label: localize("Dwell &Clicker"),
-			speech_recognition: [
-				"dwell clicking", "dwell click", "dwell clicker", "auto click", "auto clicker", "auto clicking", "click automatically",
-				"stop clicking", "stop auto clicking", "stop auto click", "stop auto clicker", "stop dwell clicking", "stop dwell click", "stop dwell clicker",
-			],
-			checkbox: {
-				toggle: () => {
-					if (/head-tracker/i.test(location.hash)) {
-						// @TODO: confirmation dialog that you could cancel with dwell clicking!
-						// Or: make head tracker work independently of dwell clicking, i.e. with facial gestures
-						// if (confirm("This will disable head tracker mode.")) {
-						// change_some_url_params({
-						// 	"head-tracker": false,
-						// 	"dwell-clicker": false,
-						// });
-						// }
-					} else if (/dwell-clicker/i.test(location.hash)) {
-						change_url_param("dwell-clicker", false);
-					} else {
-						change_url_param("dwell-clicker", true);
-					}
-				},
-				check: () => {
-					return /dwell-clicker|head-tracker/i.test(location.hash);
-				},
-			},
-			enabled: () => {
-				return !/head-tracker/i.test(location.hash);
-			},
-			description: localize("Clicks automatically after hovering in one place."),
-		},
+		// {
+		// 	emoji_icon: "⏱️",
+		// 	// label: localize("Dwell &Click"),
+		// 	label: localize("Dwell &Clicker"),
+		// 	speech_recognition: [
+		// 		"dwell clicking", "dwell click", "dwell clicker", "auto click", "auto clicker", "auto clicking", "click automatically",
+		// 		"stop clicking", "stop auto clicking", "stop auto click", "stop auto clicker", "stop dwell clicking", "stop dwell click", "stop dwell clicker",
+		// 	],
+		// 	checkbox: {
+		// 		toggle: () => {
+		// 			if (/head-tracker/i.test(location.hash)) {
+		// 				// @TODO: confirmation dialog that you could cancel with dwell clicking!
+		// 				// Or: make head tracker work independently of dwell clicking, i.e. with facial gestures
+		// 				// if (confirm("This will disable head tracker mode.")) {
+		// 				// change_some_url_params({
+		// 				// 	"head-tracker": false,
+		// 				// 	"dwell-clicker": false,
+		// 				// });
+		// 				// }
+		// 			} else if (/dwell-clicker/i.test(location.hash)) {
+		// 				change_url_param("dwell-clicker", false);
+		// 			} else {
+		// 				change_url_param("dwell-clicker", true);
+		// 			}
+		// 		},
+		// 		check: () => {
+		// 			return /dwell-clicker|head-tracker/i.test(location.hash);
+		// 		},
+		// 	},
+		// 	enabled: () => {
+		// 		return !/head-tracker/i.test(location.hash);
+		// 	},
+		// 	description: localize("Clicks automatically after hovering in one place."),
+		// },
 		{
 			emoji_icon: "🔍",
 			// label: localize("&Enlarge Buttons"), // too specific; it also enlarges windows and other UI elements
@@ -1321,81 +1315,81 @@ const menus = {
 			},
 			description: localize("Arranges the color box vertically."),
 		},
-		{
-			emoji_icon: "🎙️",
-			label: localize("&Speech Recognition"),
-			speech_recognition: [
-				"toggle speech recognition", "toggle speech recognition mode",
-				"disable speech recognition", "disable speech recognition mode", "turn off speech recognition", "turn off speech recognition mode", "leave speech recognition mode", "exit speech recognition mode",
-			],
-			checkbox: {
-				toggle: () => {
-					if (/speech-recognition-mode/i.test(location.hash)) {
-						change_url_param("speech-recognition-mode", false);
-					} else {
-						change_url_param("speech-recognition-mode", true);
-					}
-				},
-				check: () => {
-					return speech_recognition_active;
-				},
-			},
-			enabled: () => speech_recognition_available,
-			description: localize("Controls the application with voice commands."),
-		},
-		MENU_DIVIDER,
-		{
-			emoji_icon: "🗃️",
-			label: localize("Manage Storage"),
-			speech_recognition: [
-				// This is a duplicate menu item (for easy access), so it doesn't need speech recognition data here.
-			],
-			action: () => { manage_storage(); },
-			description: localize("Manages storage of previously created or opened pictures."),
-		},
-		MENU_DIVIDER,
-		{
-			emoji_icon: "📢",
-			label: localize("Project News"),
-			speech_recognition: [
-				"project news", "news about the project", "news about this project",
-				"app news", "news about the app", "news about this app",
-				"application news", "news about the application", "news about this application",
-				"what's new", "new features",
-				"show news", "show news update", "news update",
-			],
-			action: () => { show_news(); },
-			description: localize("Shows news about JS Paint."),
-		},
-		{
-			emoji_icon: "👾", // "👋",
-			label: localize("Discord"),
-			speech_recognition: [
-				"chat on discord", "discord server", "discord community", "join the discord", "join discord", "visit the discord", "visit discord", "discord chat",
-			],
-			action: () => {
-				window.open("https://discord.gg/jxQBK3k8tx");
-			},
-			description: localize("Joins the community on Discord."),
-		},
-		{
-			emoji_icon: "ℹ️",
-			label: localize("GitHub"),
-			speech_recognition: [
-				"repo on github", "project on github", "show the source code", "show source code",
-			],
-			action: () => { window.open("https://github.com/1j01/jspaint"); },
-			description: localize("Shows the project on GitHub."),
-		},
-		{
-			emoji_icon: "💵",
-			label: localize("Donate"),
-			speech_recognition: [
-				"donate", "make a monetary contribution",
-			],
-			action: () => { window.open("https://www.paypal.me/IsaiahOdhner"); },
-			description: localize("Supports the project."),
-		},
+		// {
+		// 	emoji_icon: "🎙️",
+		// 	label: localize("&Speech Recognition"),
+		// 	speech_recognition: [
+		// 		"toggle speech recognition", "toggle speech recognition mode",
+		// 		"disable speech recognition", "disable speech recognition mode", "turn off speech recognition", "turn off speech recognition mode", "leave speech recognition mode", "exit speech recognition mode",
+		// 	],
+		// 	checkbox: {
+		// 		toggle: () => {
+		// 			if (/speech-recognition-mode/i.test(location.hash)) {
+		// 				change_url_param("speech-recognition-mode", false);
+		// 			} else {
+		// 				change_url_param("speech-recognition-mode", true);
+		// 			}
+		// 		},
+		// 		check: () => {
+		// 			return speech_recognition_active;
+		// 		},
+		// 	},
+		// 	enabled: () => speech_recognition_available,
+		// 	description: localize("Controls the application with voice commands."),
+		// },
+		// MENU_DIVIDER,
+		// {
+		// 	emoji_icon: "🗃️",
+		// 	label: localize("Manage Storage"),
+		// 	speech_recognition: [
+		// 		// This is a duplicate menu item (for easy access), so it doesn't need speech recognition data here.
+		// 	],
+		// 	action: () => { manage_storage(); },
+		// 	description: localize("Manages storage of previously created or opened pictures."),
+		// },
+		// MENU_DIVIDER,
+		// {
+		// 	emoji_icon: "📢",
+		// 	label: localize("Project News"),
+		// 	speech_recognition: [
+		// 		"project news", "news about the project", "news about this project",
+		// 		"app news", "news about the app", "news about this app",
+		// 		"application news", "news about the application", "news about this application",
+		// 		"what's new", "new features",
+		// 		"show news", "show news update", "news update",
+		// 	],
+		// 	action: () => { show_news(); },
+		// 	description: localize("Shows news about JS Paint."),
+		// },
+		// {
+		// 	emoji_icon: "👾", // "👋",
+		// 	label: localize("Discord"),
+		// 	speech_recognition: [
+		// 		"chat on discord", "discord server", "discord community", "join the discord", "join discord", "visit the discord", "visit discord", "discord chat",
+		// 	],
+		// 	action: () => {
+		// 		window.open("https://discord.gg/jxQBK3k8tx");
+		// 	},
+		// 	description: localize("Joins the community on Discord."),
+		// },
+		// {
+		// 	emoji_icon: "ℹ️",
+		// 	label: localize("GitHub"),
+		// 	speech_recognition: [
+		// 		"repo on github", "project on github", "show the source code", "show source code",
+		// 	],
+		// 	action: () => { window.open("https://github.com/1j01/jspaint"); },
+		// 	description: localize("Shows the project on GitHub."),
+		// },
+		// {
+		// 	emoji_icon: "💵",
+		// 	label: localize("Donate"),
+		// 	speech_recognition: [
+		// 		"donate", "make a monetary contribution",
+		// 	],
+		// 	action: () => { window.open("https://www.paypal.me/IsaiahOdhner"); },
+		// 	description: localize("Supports the project."),
+		// },
 	],
 };
 
