@@ -1304,19 +1304,41 @@ reset_selected_colors();
 reset_canvas_and_history(); // (with newly reset colors)
 set_magnification(default_magnification);
 
-$G.on("app-initialized", () => {
-	// Zoom to window
+
+
+// $G.on("app-initialized", () => {
+// 	// Zoom to window
+// 	const rect = $canvas_area[0].getBoundingClientRect();
+// 	const margin = 30; // leave a margin so scrollbars won't appear
+// 	let mag = Math.min(
+// 		(rect.width - margin) / main_canvas.width,
+// 		(rect.height - margin) / main_canvas.height,
+// 	);
+// 	// round to an integer percent for the View > Zoom > Custom... dialog
+// 	mag = Math.floor(100 * mag) / 100;
+// 	set_magnification(mag);
+// 	console.log("zoome")
+// });
+
+function zoom_to_fit_canvas() {
 	const rect = $canvas_area[0].getBoundingClientRect();
-	const margin = 30; // leave a margin so scrollbars won't appear
+	const margin = 30;
 	let mag = Math.min(
 		(rect.width - margin) / main_canvas.width,
 		(rect.height - margin) / main_canvas.height,
 	);
-	// round to an integer percent for the View > Zoom > Custom... dialog
 	mag = Math.floor(100 * mag) / 100;
 	set_magnification(mag);
-	console.log("zoome")
-});
+	console.log("zoomed");
+}
+
+// Run on custom event
+$G.on("app-initialized", zoom_to_fit_canvas);
+
+// Also run on reload (optional fallback)
+document.addEventListener("DOMContentLoaded", zoom_to_fit_canvas);
+
+
 
 // Trigger the initialization event after everything is loaded
 $(() => {
