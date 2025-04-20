@@ -16,8 +16,8 @@ const default_magnification = 1;
 /** @type {Tool} */
 const default_tool = window.get_tool_by_id(window.TOOL_PENCIL);
 
-const default_canvas_width = 683;
-const default_canvas_height = 384;
+const default_canvas_width = 32;
+const default_canvas_height = 32;
 let my_canvas_width = default_canvas_width;
 let my_canvas_height = default_canvas_height;
 
@@ -110,7 +110,7 @@ let $thumbnail_window;
 /** @type {PixelCanvas} */
 let thumbnail_canvas;
 /** @type {boolean} */
-let show_grid = false;
+let show_grid = true;
 /** @type {boolean} */
 let show_thumbnail = false;
 /** @type {TextToolFontOptions} */

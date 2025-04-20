@@ -21,6 +21,7 @@ import { localStore } from "./storage.js";
 import { get_theme, set_theme } from "./theme.js";
 import { TOOL_AIRBRUSH, TOOL_BRUSH, TOOL_CURVE, TOOL_ELLIPSE, TOOL_ERASER, TOOL_LINE, TOOL_PENCIL, TOOL_POLYGON, TOOL_RECTANGLE, TOOL_ROUNDED_RECTANGLE, TOOL_SELECT, tools } from "./tools.js";
 
+
 // #region Exports
 
 // Q: Why are the exports at the top of the file?
@@ -468,6 +469,10 @@ if (location.search.match(/vertical-colors?-box/)) {
 
 // #endregion
 
+
+
+
+
 // #region App UI
 
 const $app = $(E("div")).addClass("jspaint").appendTo("body");
@@ -497,6 +502,7 @@ const canvas_handles = new Handles({
 });
 window.canvas_handles = canvas_handles;
 
+
 const $top = $(E("div")).addClass("component-area top").prependTo($V);
 window.$top = $top;
 const $bottom = $(E("div")).addClass("component-area bottom").appendTo($V);
@@ -517,7 +523,7 @@ if (get_direction() === "rtl") {
 // (arguably still App UI stuff below, but it becomes a fuzzy line later on)
 
 // #region Status Bar
-const $status_area = $(E("div")).addClass("status-area").appendTo($V);
+const $status_area = $(E("div")).addClass("status-area").hide().appendTo($V);
 window.$status_area = $status_area;
 const $status_text = /** @type {JQuery<HTMLDivElement> & {default: ()=> void}} */($(E("div")).addClass("status-text status-field inset-shallow").appendTo($status_area));
 window.$status_text = $status_text;
@@ -1298,6 +1304,24 @@ reset_selected_colors();
 reset_canvas_and_history(); // (with newly reset colors)
 set_magnification(default_magnification);
 
+$G.on("app-initialized", () => {
+	// Zoom to window
+	const rect = $canvas_area[0].getBoundingClientRect();
+	const margin = 30; // leave a margin so scrollbars won't appear
+	let mag = Math.min(
+		(rect.width - margin) / main_canvas.width,
+		(rect.height - margin) / main_canvas.height,
+	);
+	// round to an integer percent for the View > Zoom > Custom... dialog
+	mag = Math.floor(100 * mag) / 100;
+	set_magnification(mag);
+});
+
+// Trigger the initialization event after everything is loaded
+$(() => {
+	$G.trigger("app-initialized");
+});
+
 // this is synchronous for now, but @TODO: handle possibility of loading a document before callback
 // when switching to asynchronous storage, e.g. with localforage
 localStore.get({
@@ -1783,5 +1807,20 @@ window.api_for_cypress_tests = {
 	$,
 };
 // #endregion
+
+
+$G.on("app-initialized", () => {
+	// Zoom to window
+	const rect = $canvas_area[0].getBoundingClientRect();
+	const margin = 30; // leave a margin so scrollbars won't appear
+	let mag = Math.min(
+		(rect.width - margin) / main_canvas.width,
+		(rect.height - margin) / main_canvas.height,
+	);
+	// round to an integer percent for the View > Zoom > Custom... dialog
+	mag = Math.floor(100 * mag) / 100;
+	set_magnification(mag);
+	console.log("zoome")
+});
 
 init_webgl_stuff();

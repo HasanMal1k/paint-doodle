@@ -530,7 +530,7 @@ const menus = {
 						"toggle grid", "toggle gridlines", "toggle grid lines", "toggle grid cells",
 						// @TODO: hide/show
 					],
-					enabled: () => magnification >= 4,
+					enabled: () => magnification >= -100,
 					checkbox: {
 						toggle: () => { toggle_grid(); },
 						check: () => show_grid,
