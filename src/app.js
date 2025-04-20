@@ -1315,6 +1315,7 @@ $G.on("app-initialized", () => {
 	// round to an integer percent for the View > Zoom > Custom... dialog
 	mag = Math.floor(100 * mag) / 100;
 	set_magnification(mag);
+	console.log("zoome")
 });
 
 // Trigger the initialization event after everything is loaded
@@ -1809,18 +1810,5 @@ window.api_for_cypress_tests = {
 // #endregion
 
 
-$G.on("app-initialized", () => {
-	// Zoom to window
-	const rect = $canvas_area[0].getBoundingClientRect();
-	const margin = 30; // leave a margin so scrollbars won't appear
-	let mag = Math.min(
-		(rect.width - margin) / main_canvas.width,
-		(rect.height - margin) / main_canvas.height,
-	);
-	// round to an integer percent for the View > Zoom > Custom... dialog
-	mag = Math.floor(100 * mag) / 100;
-	set_magnification(mag);
-	console.log("zoome")
-});
 
 init_webgl_stuff();
