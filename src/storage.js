@@ -1,7 +1,8 @@
+// A modified version of src/storage.js that uses in-memory storage
 // @ts-check
 
-// @TODO: maybe replace this module with localforage or similar
-// (but need to address asynchronous concerns if doing that)
+// Create an in-memory store that mimics localStorage but doesn't persist
+const memoryStore = {};
 
 /** @type {LocalStore} */
 const localStore = {
@@ -15,7 +16,7 @@ const localStore = {
 		try {
 			if (typeof key_or_keys_or_pairs === "string") {
 				const key = key_or_keys_or_pairs;
-				const item = localStorage.getItem(key);
+				const item = memoryStore[key];
 				if (item) {
 					obj = JSON.parse(item);
 				}
@@ -25,7 +26,7 @@ const localStore = {
 					const keys = key_or_keys_or_pairs;
 					for (let i = 0, len = keys.length; i < len; i++) {
 						const key = keys[i];
-						const item = localStorage.getItem(key);
+						const item = memoryStore[key];
 						if (item) {
 							obj[key] = JSON.parse(item);
 						}
@@ -34,7 +35,7 @@ const localStore = {
 					const keys_obj = key_or_keys_or_pairs;
 					for (const key in keys_obj) {
 						let defaultValue = keys_obj[key];
-						const item = localStorage.getItem(key);
+						const item = memoryStore[key];
 						if (item) {
 							obj[key] = JSON.parse(item);
 						} else {
@@ -70,7 +71,7 @@ const localStore = {
 		for (const key in to_set) {
 			const value = to_set[key];
 			try {
-				localStorage.setItem(key, JSON.stringify(value));
+				memoryStore[key] = JSON.stringify(value);
 			} catch (error) {
 				error.quotaExceeded = error.code === 22 || error.name === "NS_ERROR_DOM_QUOTA_REACHED" || error.number === -2147024882;
 				callback(error);
